@@ -1,5 +1,5 @@
 //import React, { useState } from 'react'
-import { useEffect, useState } from 'react';
+//import { useEffect, useState } from 'react';
 import styles from './Board.module.css';
 
 type squareProps = {
@@ -14,14 +14,12 @@ type squareProps = {
 function Square(props: squareProps) {
 
   const {id, row, col, value, updateFunction} = props;
-  const [occupied, setOccupied] = useState(false);
-
-  //useEffect(() => setOccupied(value !== ''), [value])
+  //const [occupied, setOccupied] = useState(false);
 
   function handleClick(){
     if (!(value)) {
         updateFunction(row, col)
-        setOccupied(true)
+        //setOccupied(true)
     }
     //updateFunction(row, col)
   }

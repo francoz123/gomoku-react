@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
-import Square from './Square';
 import styles from './Board.module.css'
+import { useParams } from 'react-router-dom';
+import { Square } from '../components';
 
 
-function Game(props: {boardSize: number}) {
-    const {boardSize} = props;
+function Game(props: {bs: number}) {
+    const { size } = useParams()
+    const boardSize = Number(size)
+    //const {bs} = props;
     const [moveNumber, setMoveNumber] = useState(1);
     const [gameOver, setGameOver] = useState(false);
     const [turn, setTurn] = useState('b');

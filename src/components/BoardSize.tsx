@@ -1,27 +1,25 @@
-import React, { ChangeEventHandler, useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import Styles  from './BoardSize.module.css';
-import Main from './Main';
-import Game from './Game';
-import { PLAYER } from './Piece';
 
 const maxSize = 16;
 
-
 function BoardSize() {
-    const [removeBoard, setBoardVisbility] = useState(false);
-    const [value, setValue] = useState(0);
-    function removeBoardSizeInput(){
-        setBoardVisbility((v) => !v);
+    const navigate = useNavigate()
+    const [value, setValue] = useState('5');
+
+    function handleChange (e: React.FormEvent<HTMLSelectElement>) {
+        setValue(e.currentTarget.value)
     }
-    
-  return (
-    (<>
-        {!removeBoard &&
-        (<div className={Styles.boardSizeFormContainer} id='board-size-form-container'>
+    return (
+        <div className={Styles.boardSizeFormContainer} id='board-size-form-container'>
             <form action="" className={Styles.boardSizeForm}>
                 <label htmlFor="board-size">Select board size</label>
                 <select name="board-size-select" id="board-size-select"  
-                className={Styles.boardSizeSelect} size={16} value={5}
+                    className={Styles.boardSizeSelect} 
+                    size={16} 
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
                 >
                     {Array.from({length:maxSize}).map((_, index) => {
                         return <option value={index+5}>{index+5} </option>
@@ -29,23 +27,16 @@ function BoardSize() {
                     
                 </select>
 
-                <StartButton onClick={removeBoardSizeInput} />
+                <StartButton onClick={() => navigate(`game/${value}`)} />
             </form>
                 
-        </div>)}
-
-        {removeBoard &&
-        (
-            <Game boardSize={5} />
-        )}
-    </>
+        </div>
     )
-  )//<Board size={7} game={new Game(7, PLAYER.BLACK)} />
 }
 
 
 function StartButton(props: {onClick: ()=>void}) {
-    const [buttonPressed, setButtonPressed] = useState(false);
+    //const [buttonPressed, setButtonPressed] = useState(false);
     const { onClick } = props;
     /* useEffect(() => {buttonPressed && onClick(); 
     }, [buttonPressed, onClick]); */
