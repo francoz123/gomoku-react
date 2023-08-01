@@ -36,6 +36,9 @@ function Game(props: {bs: number}) {
     }
 
     function updateBoard(x:number, y:number) {
+        console.clear()
+        console.log(board)
+        console.log(turn)
         if (gameOver) return
         let newBoard = [...board]
         newBoard[x][y] = turn
@@ -46,7 +49,7 @@ function Game(props: {bs: number}) {
         setMoves(newMoves)
         setMoveNumber(num => num + 1)
 
-        if (countPieces(x, y) === 5) {
+        if (countPieces(x, y) >= 5) {
             setGameOver(true)
             setMessage((turn === 'w'? 'White': 'Black' ) + ' wins')
             return
@@ -56,8 +59,8 @@ function Game(props: {bs: number}) {
             setMessage('Draw')
             return
         }
-        
-        
+        console.log(countPieces(x, y))
+        console.log(turn)
         if (!gameOver) {
             changeTurn()
             setMessage((turn === 'w'? 'Black':'White')+' to play')
