@@ -1,16 +1,15 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Styles  from './BoardSize.module.css';
+import { UserContext } from '../context';
 
 const maxSize = 16;
 
 function BoardSize() {
     const navigate = useNavigate()
     const [value, setValue] = useState('5');
-
-    function handleChange (e: React.FormEvent<HTMLSelectElement>) {
-        setValue(e.currentTarget.value)
-    }
+    const { setBoardSize } = useContext(UserContext)
+    
     return (
         <div className={Styles.boardSizeFormContainer} id='board-size-form-container'>
             <form action="" className={Styles.boardSizeForm}>
@@ -27,7 +26,12 @@ function BoardSize() {
                     
                 </select>
 
-                <StartButton onClick={() => navigate(`game/${value}`)} />
+                <StartButton onClick={
+                    () => {
+                        setBoardSize(parseInt(value))
+                        navigate('/game')
+                    }
+                } />
             </form>
                 
         </div>

@@ -1,50 +1,16 @@
-.board {
-    display: flex;
-    flex: 1;
-    justify-content: center;
-    flex-direction: column;
-  }
-
-.row {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-.square {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 2rem;
-  width: 2rem;
-  background-color: rgb(96, 150, 134);
-  border: 1px solid black;
-  }
-
-.white{
-  background-color: #FFFFFF;
-}
-
-.black{
-  background-color: #000000;
-}
-
 main {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
 .buttonContainer {
   display: flex;
   justify-content: space-between;
-  gap: 3rem;
-  width: 100%;
   width: 100%;
 }
-
 
 .container {
   display: flex;
@@ -52,6 +18,7 @@ main {
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  margin-top: 2rem;
   padding: 1rem;
   width: 50%;
 }
@@ -59,12 +26,13 @@ main {
   background-color: blue;
   display: flex;
   justify-content: space-between;
-  width: 80%;
+  width: 100%;
   gap:2px;
 }
-.log #d{
+.logs{
   display: flex; 
-  background-color:teal;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .record {
@@ -80,6 +48,3 @@ main {
   width: 100%;
 }
 
-.info {
-  font-weight: bold;
-}

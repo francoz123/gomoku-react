@@ -1,13 +1,12 @@
-import React, { useState } from 'react'
+import { useState, useContext } from 'react'
 import styles from './Board.module.css'
-import { useParams } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { Square } from '../components';
+import { UserContext } from '../context';
 
 
 function Game(props: {bs: number}) {
-    const { size } = useParams()
-    const boardSize = Number(size)
-    //const {bs} = props;
+    const { user, boardSize } = useContext(UserContext)
     const [moveNumber, setMoveNumber] = useState(1);
     const [gameOver, setGameOver] = useState(false);
     const [turn, setTurn] = useState('b');
@@ -23,12 +22,11 @@ function Game(props: {bs: number}) {
     );
     const [message, setMessage] = useState((turn === 'b'? 
         'Black':'White')+' to play');
-    //const [elements, setElements] = useState(initializeElements())
+    if (!user) return <Navigate to='/login' />
     let elements = initializeElements()
 
     function changeTurn() {
         setTurn(t => t = t === 'b'? 'w': 'b')
-        //turn === 'b'? setTurn('w') : setTurn('b')
     }
 
     function validSquare(x: number, y:number): boolean{
@@ -160,14 +158,16 @@ function Game(props: {bs: number}) {
     }
 
     return (
-        <div id='main' className='main'>
-            <div id='info' className={styles.info}>{message}</div>
+      <main>
+        <div className={styles.container}>
+          <div id='info' className={styles.info}>{message}</div>
             {elements}
-            <div id='btnContainer' className='btnContainer'>
+            <div id='btnContainer' className={styles.btnContainer}>
                 <button onClick={resetBoard}>Reset</button>
                 <button>Leave game</button>
             </div>
-        </div>
+          </div>
+      </main>
     )//
 }
 
