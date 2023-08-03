@@ -9,6 +9,8 @@ main {
 .buttonContainer {
   display: flex;
   justify-content: space-between;
+  gap: 3rem;
+  width: 100%;
   width: 100%;
 }
 
@@ -22,6 +24,7 @@ main {
   padding: 1rem;
   width: 50%;
 }
+
 .log {
   background-color: blue;
   display: flex;
@@ -29,6 +32,7 @@ main {
   width: 100%;
   gap:2px;
 }
+
 .logs{
   display: flex; 
   justify-content: space-between;

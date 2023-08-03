@@ -10,7 +10,7 @@ function UserLogin() {
         {!user && <Link to='Login' className={styles.a}>
             Login
         </Link>}
-        {user && <Link to='PreviusGames' className={styles.a}>
+        {user && <Link to='/games' className={styles.a}>
             Previous games
         </Link>}
     </div>

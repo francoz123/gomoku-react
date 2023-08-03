@@ -1,12 +1,13 @@
 import { useState, useContext } from 'react'
-import styles from './Board.module.css'
-import { Navigate } from 'react-router-dom';
+import styles from './Game.module.css'
+import { Navigate, useNavigate } from 'react-router-dom';
 import { Square } from '../components';
 import { UserContext } from '../context';
-
+import { GameRecord } from '../types';
 
 function Game(props: {bs: number}) {
     const { user, boardSize } = useContext(UserContext)
+    const navigate = useNavigate()
     const [moveNumber, setMoveNumber] = useState(1);
     const [gameOver, setGameOver] = useState(false);
     const [turn, setTurn] = useState('b');
@@ -22,6 +23,7 @@ function Game(props: {bs: number}) {
     );
     const [message, setMessage] = useState((turn === 'b'? 
         'Black':'White')+' to play');
+    ///const localStorage = useLocalStorage()
     if (!user) return <Navigate to='/login' />
     let elements = initializeElements()
 
@@ -100,7 +102,7 @@ function Game(props: {bs: number}) {
                     }
     
                     count = currernCount
-                    if (count === 5) {
+                    if (count >= 5) {
                         setGameOver(true)
                         return count
                     }
@@ -157,6 +159,26 @@ function Game(props: {bs: number}) {
         setMessage('Black to play')
     }
 
+    function leaveGame() {
+      let currenGame = board.map((row, rowIndex) => {
+        return row.map ((square, squareIndex) => 
+          [board[rowIndex][squareIndex], moves[rowIndex][squareIndex]])
+       })
+      let games: GameRecord[] | any = []
+      let gameLogs = window.localStorage.getItem('gameLogs');
+      if (gameLogs) games = JSON.parse(gameLogs)
+      let id = games.length + 1
+      let date = getDate()
+      games.push ({'id':id, 'game':currenGame, 'date':date, 'winner': turn})
+      window.localStorage.setItem('gameLogs',JSON.stringify (games))
+    }
+    function getDate() {
+      const today = new Date();
+      const month = today.getMonth() + 1;
+      const year = today.getFullYear();
+      const date = today.getDate();
+      return `${month}/${date}/${year}`;
+    }
     return (
       <main>
         <div className={styles.container}>
@@ -164,7 +186,10 @@ function Game(props: {bs: number}) {
             {elements}
             <div id='btnContainer' className={styles.btnContainer}>
                 <button onClick={resetBoard}>Reset</button>
-                <button>Leave game</button>
+                <button onClick={() => {
+                    leaveGame()
+                    navigate('/games')}
+                    }>Leave game</button>
             </div>
           </div>
       </main>
