@@ -1,11 +1,11 @@
-import { useContext, useRef, useState, useEffect } from 'react'
+import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { UserContext } from '../context'
 import styles from './Login.module.css'
+import Users from '../data/users.json'
 
 function Login() {
   const { login } = useContext(UserContext)
-  const usernameInput = useRef<HTMLInputElement | null>(null)
   const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -13,7 +13,10 @@ function Login() {
 
   function handleLogin() {
     setErrorMessage('')
-    if (username === 'admin' && password === 'admin') {
+    const user = Users.find(x => 
+      x.username === username && x.password === password
+    )
+    if (user) {
       login('some user')
       navigate('/')
     } else {
@@ -21,21 +24,15 @@ function Login() {
     }
   }
 
-  useEffect(() => {
-    if (usernameInput.current) {
-      usernameInput.current.focus()
-    }
-  }, [])
-
   return (
     <main>
       <div className={styles.container}>
         {errorMessage && <p className={styles.error}>{errorMessage}</p>}
         <form action="" className={styles.authentication} 
-        onSubmit={(e) => {
+          onSubmit={(e) => {
           e.preventDefault()
           handleLogin()
-          }}>
+        }}>
           <input 
             type="text" 
             name="username" 
@@ -45,8 +42,8 @@ function Login() {
             placeholder="username"/>
           <input 
             type="password"
-            name="username" 
-            id="username" 
+            name="password" 
+            id="password" 
             value={password} 
             onChange={(e) => setPassword(e.target.value)}
             placeholder="password"/>

@@ -1,18 +1,27 @@
-import { Link } from 'react-router-dom';
-import styles from './Header.module.css';
+import { useNavigate } from 'react-router-dom';
+import styles from './UserLogin.module.css';
 import { useContext } from 'react';
 import { UserContext } from '../context';
 
 function UserLogin() {
+  const navigate = useNavigate()
   const { user } = useContext(UserContext)
   return (
     <div className={styles.login}>
-        {!user && <Link to='Login' className={styles.a}>
-            Login
-        </Link>}
-        {user && <Link to='/games' className={styles.a}>
-            Previous games
-        </Link>}
+        {!user && 
+          <button 
+            onClick={() => navigate('Login')} 
+            className={styles.loginButton}>
+              Login
+          </button>
+        }
+        {user && 
+          <button 
+            onClick={() => navigate('games')} 
+            className={styles.loginButton}>
+              Previous games
+          </button>
+        }
     </div>
   )
 }

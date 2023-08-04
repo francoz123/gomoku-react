@@ -1,4 +1,6 @@
-//export { default as Game} from './Game'
 export { default as BoardSize} from './BoardSize'
 export { default as Header} from './Header'
 export { default as Square} from './Square'
+export { default as Logo} from './Logo'
+export { default as UserLogin} from './UserLogin'
+export { default as Main} from './Main'

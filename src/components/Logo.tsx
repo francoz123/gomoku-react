@@ -1,11 +1,12 @@
+import { Link } from 'react-router-dom';
 import styles from './Header.module.css';
 
 function 
 Logo() {
   return (
-    <a href='Home' className={styles.logo}>
+    <Link to='/' className={styles.logo}>
         Gomoku
-    </a>
+    </Link>
   )
 }
 

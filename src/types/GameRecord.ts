@@ -1,5 +1,5 @@
 export  type GameRecord = {
-    id: string
+    id: string | undefined
     game: (string | number)[][][]
     date: string
     winner: string

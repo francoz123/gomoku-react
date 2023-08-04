@@ -26,11 +26,12 @@ main {
 }
 
 .log {
-  background-color: blue;
   display: flex;
   justify-content: space-between;
   width: 100%;
   gap:2px;
+  border: 1px solid black;
+  padding: 5px;
 }
 
 .logs{
@@ -40,15 +41,15 @@ main {
 }
 
 .record {
-  width: 50%;
-  background-color: yellow;
+  width: 35%;
   text-align: left;
   display: flex;
   align-items: center;
   padding: 0.5rem 1rem;
 }
 
-.authentication .submit {
-  width: 100%;
+.gameInfo {
+  display: flex;
+  width: 80%;
 }
 

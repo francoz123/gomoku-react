@@ -37,3 +37,11 @@
     color: #FFFFFF;
     text-decoration: none;
   }
+
+  .loginButton {
+    display: inline-block;
+    color: #FFFFFF;
+    border: none;
+    background-color: inherit;
+    padding: 5px;
+  }

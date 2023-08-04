@@ -1,27 +1,31 @@
 import { useContext } from 'react'
-import styles from './Board.module.css'
+import styles from './GameLog.module.css'
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { UserContext } from '../context';
-import React from 'react';
 import { GameRecord } from '../types';
 
 function GameLog() {
   const {id} = useParams()
   const { user } = useContext(UserContext)
   const navigate = useNavigate()
+
   if (!user) return <Navigate to='/login' />
-  let games: GameRecord[] //| any = null
+
+  let games: GameRecord[] 
   let gameLogs = window.localStorage.getItem('gameLogs');
-  console.log(gameLogs)
+
   if (!gameLogs) return  <p>No games to show</p>
   else games = JSON.parse(gameLogs)
-  console.log(games)
 
-  let thisGame: GameRecord | undefined = games.find(x => x.id == id)
+  let thisGame: GameRecord | undefined = games.find(x =>
+    String(x.id) === String(id)
+  )
+
   console.log(thisGame)
 
   let boardSize = thisGame? thisGame.game[0].length : 0
   const elements = initializeElements()
+  
   function initializeElements() {
     return (
         <div id='board' className={styles.board}>
@@ -47,13 +51,17 @@ function GameLog() {
 
   return (
     <main>
-      <div className={styles.info}>Winner: {thisGame?.winner === 'b'? 'Black': 'White'}</div>
-      {elements}
-      <div className={styles.btnContainer}>
+      <div className={styles.info}>
+      {thisGame?.winner !== 'Draw' ? 'Winner: ' + thisGame?.winner
+        : 'Draw Game'
+      }
+      </div>
+          {elements}
+      <div className={styles.buttonContainer}>
         <button onClick={() => navigate('/games')}>Back</button>
       </div>
     </main>
-  )//
+  )
 }
 
 export default GameLog
