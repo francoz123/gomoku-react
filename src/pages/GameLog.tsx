@@ -61,6 +61,7 @@ function GameLog() {
           {elements}
       <div className={styles.buttonContainer}>
         <button onClick={() => navigate('/games')}>Back</button>
+        <button onClick={() => navigate(`/watch/${id}`)}>Back</button>
       </div>
     </main>
   )

@@ -17,21 +17,22 @@ function WatchGame() {
   const items: boolean[][] = []
   const displayArray: DisplayItem[] = []
   const [displayItems, setDisplayItems] = useState(displayArray)
-  const [visible, setVisible] = useState(items)
-  
+  const [visible, setVisible] = useState(Array.from({length:9}).map((_) =>
+  Array.from({length:9}).map((i) => false)))
+  const [count, setCount] = useState(0)
   useEffect(() => {
+    console.log(displayItems)
     let copy = [...displayItems]
     copy = copy.sort((a,b) => {return Number(a.move) - Number(b.move)})
     setDisplayItems(copy)
-    let count = 0
     const intervalfunction = setInterval(() => {
       let item = displayItems[count]
       let copy = [...visible]
       copy[item.row][item.col] = true
       setVisible(copy)
-      count++
-      if (count === displayItems.length) clearInterval(intervalfunction)
+      setCount((c: number) => c+1)
     }, 5000)
+    return () => clearInterval(intervalfunction)
   }, [])
   if (!user) return <Navigate to='/login' />
 
@@ -44,12 +45,13 @@ function WatchGame() {
   let thisGame: GameRecord | undefined = games.find(x =>
     String(x.id) === String(id)
   )
-
-  setVisible(
-    Array.from({length:thisGame?thisGame.boardSize:0}).map((_) =>
-        Array.from({length:thisGame?thisGame.boardSize:0}).map((i) => false)
+ console.log(thisGame)
+  
+    let a = Array.from({length:thisGame?thisGame.game[0].length:0}).map((_) =>
+      {return Array.from({length:thisGame?thisGame.game[0].length:0}).map((i) => false)}
     )
-  )
+    setVisible(a)
+  console.log(a)
   
   let boardSize = thisGame? thisGame.boardSize : 0
   const elements = initializeElements()
@@ -99,3 +101,7 @@ function WatchGame() {
 }
 
 export default WatchGame
+
+function useStateCallback(arg0: number): [any, any] {
+  throw new Error('Function not implemented.');
+}
