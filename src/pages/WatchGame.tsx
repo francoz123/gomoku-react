@@ -18,6 +18,7 @@ function WatchGame() {
   const displayArray: DisplayItem[] = []
   const [displayItems, setDisplayItems] = useState(displayArray)
   const [visible, setVisible] = useState(items)
+  const [count, setCount] = useState(0)
   
   useEffect(() => {
     let copy = [...displayItems]
@@ -32,7 +33,7 @@ function WatchGame() {
       count++
       if (count === displayItems.length) clearInterval(intervalfunction)
     }, 5000)
-  }, [])
+  }, [displayItems, visible])
   if (!user) return <Navigate to='/login' />
 
   let games: GameRecord[] 
