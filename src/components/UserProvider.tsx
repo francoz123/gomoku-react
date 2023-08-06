@@ -15,7 +15,6 @@ export default function UserProvider({ children }: UserProviderProps) {
  function setBoardSize (x: number) {
     setBS(x)
   }
-   /* const setBoardSize2 = (x: number) => {setBS(x)} */
   
   return (
     <UserContext.Provider value={{ user, login, logout, setBoardSize, boardSize }}>

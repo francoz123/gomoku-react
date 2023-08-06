@@ -2,6 +2,7 @@ import styles from './Games.module.css'
 import { GameRecord } from '../types';
 import { useNavigate } from 'react-router-dom';
 
+// Displays finished games and their outcomes
 export default function Games() {
   const navigate = useNavigate()
   let savedGAmes =  (window.localStorage.getItem('gameLogs'))
@@ -18,7 +19,7 @@ export default function Games() {
                   Game #{game.id} @{game.date}
                 </div>
                 <div className={styles.record}>
-                  {game.winner === 'Draw'? 'Game was a drw':'Winner: '+game.winner}
+                  {game.winner === 'Draw'? 'Game was a draw':'Winner: '+game.winner}
                 </div>
               </div>
               <button onClick={() => navigate(`/game-log/${game.id}`)}>

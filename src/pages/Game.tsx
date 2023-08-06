@@ -5,7 +5,13 @@ import { Square } from '../components';
 import { UserContext } from '../context';
 import { GameRecord } from '../types';
 
-function Game(props: {bs: number}) {
+/**
+ * Repressents the game.
+ * Prrovides fuctions to update the board and change turns,
+ * as well as calculate wins and draws
+ * @returns Game component
+ */
+function Game() {
   const { user, boardSize } = useContext(UserContext)
   const navigate = useNavigate()
   const [moveNumber, setMoveNumber] = useState(1);
@@ -104,7 +110,7 @@ function Game(props: {bs: number}) {
             if (validSquare(x1, y1)) square = board[y1][x1]
             else break
           }
-          counts[1+dy][1+dx] = currernCount
+          counts[1+dy][1+dx] = currernCount-1
           count = currernCount + counts[1+(-dy)][1+(-dx)]
           if (count >= 5) {
             setGameOver(true)
@@ -156,6 +162,8 @@ function Game(props: {bs: number}) {
         newBoard[i][j] = ''
       }
     }
+
+    setMoveNumber(1)
     setBoard(newBoard)
     setGameOver(false)
     setTurn('b')
@@ -169,10 +177,12 @@ function Game(props: {bs: number}) {
       })
     let games: GameRecord[] | any = []
     let gameLogs = window.localStorage.getItem('gameLogs');
+
     if (gameLogs) games = JSON.parse(gameLogs)
+
     let id = games.length + 1
     let date = getDate()
-    games.push ({'id':id, 'game':currenGame, 'date':date, 'winner': winner})
+    games.push ({'id':id, 'boardSize':boardSize, 'game':currenGame, 'date':date, 'winner': winner})
     window.localStorage.setItem('gameLogs',JSON.stringify (games))
   }
 

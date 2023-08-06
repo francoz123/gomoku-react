@@ -4,6 +4,7 @@ import { UserContext } from '../context'
 import styles from './Login.module.css'
 import Users from '../data/users.json'
 
+// User login form
 function Login() {
   const { login } = useContext(UserContext)
   const navigate = useNavigate()

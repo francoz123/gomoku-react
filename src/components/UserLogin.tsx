@@ -3,6 +3,7 @@ import styles from './UserLogin.module.css';
 import { useContext } from 'react';
 import { UserContext } from '../context';
 
+// Returs the login section of the header element
 function UserLogin() {
   const navigate = useNavigate()
   const { user } = useContext(UserContext)

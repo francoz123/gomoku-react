@@ -5,6 +5,8 @@ import { UserContext } from '../context';
 
 const maxSize = 16;
 
+/* Returns form element that allows players to 
+select the size of the board */
 function BoardSize() {
   const navigate = useNavigate()
   const [value, setValue] = useState('5');
@@ -36,7 +38,7 @@ function BoardSize() {
   )
 }
 
-
+// Submit button
 function StartButton(props: {onClick: ()=>void}) {
     const { onClick } = props;
     

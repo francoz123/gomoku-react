@@ -8,10 +8,10 @@ type squareProps = {
     updateFunction: (x:number, y:number) => void
 }
 
-
+// Represents a square on the board
 function Square(props: squareProps) {
   const {id, row, col, value, updateFunction} = props;
-
+  
   function handleClick(){
     if (!(value)) {
         updateFunction(row, col)
