@@ -4,7 +4,6 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { UserContext } from '../context';
 import { GameRecord } from '../types';
 import { DisplayItem } from '../types';
-import React from 'react';
 
 /**
  * Represents a game log showing all moves

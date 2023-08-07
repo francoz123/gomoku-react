@@ -136,12 +136,13 @@ function Game() {
     return (<div id='board' className={styles.board}>
     {
       Array.from({length:boardSize}).map( (_, index) => 
-      <div id={''+index} key={''+index} className={styles.row}>
+      <div id={'row'+index} key={'row'+index} className={styles.row}>
         {Array.from({length:boardSize}).map((_, i) => 
           {
             let id = index * boardSize + i;
             return <Square 
               id={id}
+              key={id}
               row={index}
               col={i}
               value={board[index][i]}

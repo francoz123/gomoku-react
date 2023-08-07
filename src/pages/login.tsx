@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { UserContext } from '../context'
 import styles from './Login.module.css'
@@ -11,6 +11,11 @@ function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
+  const ref = useRef<HTMLInputElement | null>(null)
+
+  useEffect(() => {
+    if (ref.current) ref.current?.focus()
+  }, [])
 
   function handleLogin() {
     setErrorMessage('')
@@ -18,7 +23,7 @@ function Login() {
       x.username === username && x.password === password
     )
     if (user) {
-      login('some user')
+      login(user.username)
       navigate('/')
     } else {
       setErrorMessage('Incorrect username or password')
@@ -37,6 +42,7 @@ function Login() {
           <input 
             type="text" 
             name="username" 
+            ref={ref}
             id="username" 
             value={username}
             onChange={(e) => setUsername(e.target.value)}
