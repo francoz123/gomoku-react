@@ -17,7 +17,6 @@ function WatchGame() {
   const displayArray: DisplayItem[] = []
   const [displayItems, setDisplayItems] = useState(displayArray)
   const [visible, setVisible] = useState(items)
-  const [count, setCount] = useState(0)
   
   useEffect(() => {
     let copy = [...displayItems]

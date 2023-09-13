@@ -10,11 +10,18 @@ function UserLogin() {
   return (
     <div className={styles.login}>
         {!user && 
-          <button 
-            onClick={() => navigate('Login')} 
-            className={styles.loginButton}>
-              Login
-          </button>
+          <>
+            <button 
+              onClick={() => navigate('Login')} 
+              className={styles.loginButton}>
+                Login
+            </button>
+            <button 
+              onClick={() => navigate('sign-up')} 
+              className={styles.loginButton}>
+                Sign up
+            </button>
+          </>
         }
         {user && 
           <button 

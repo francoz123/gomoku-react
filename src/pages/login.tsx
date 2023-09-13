@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { UserContext } from '../context'
 import styles from './Login.module.css'
-import Users from '../data/users.json'
+//import Users from '../data/users.json'
 
 // User login form
 function Login() {
@@ -12,23 +12,20 @@ function Login() {
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
   const ref = useRef<HTMLInputElement | null>(null)
-
-  useEffect(() => {
-    if (ref.current) ref.current?.focus()
-  }, [])
-
-  function handleLogin() {
+  
+  const handleLogin = async () => {
     setErrorMessage('')
-    const user = Users.find(x => 
-      x.username === username && x.password === password
-    )
-    if (user) {
-      login(user.username)
+    const result = await login(username, password)
+    if (result === true) {
       navigate('/')
     } else {
-      setErrorMessage('Incorrect username or password')
+      setErrorMessage(result)
     }
   }
+    
+    useEffect(() => {
+      if (ref.current) ref.current?.focus()
+    }, [])
 
   return (
     <main>
@@ -54,7 +51,10 @@ function Login() {
             value={password} 
             onChange={(e) => setPassword(e.target.value)}
             placeholder="password"/>
-          <button type="submit" className={styles.button}>Submit</button>
+          <button type="submit" 
+            className={styles.button}
+            disabled={!username || !password}
+          >Submit</button>
         </form>
       </div>
     </main>

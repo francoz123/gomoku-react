@@ -4,7 +4,7 @@ import { UserContext } from '../context'
 import styles from './Login.module.css'
 
 function SignUp() {
-  const { login } = useContext(UserContext)
+  const { register } = useContext(UserContext)
   const usernameInput = useRef<HTMLInputElement | null>(null)
   const navigate = useNavigate()
   const [username, setUsername] = useState('')
@@ -12,30 +12,34 @@ function SignUp() {
   const [cpassword, setCPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
 
-  function handleLogin() {
-    setErrorMessage('')
-    if (password === cpassword) {
-      login('some user')
-      navigate('/game')
-    } else {
-      setErrorMessage('Passwords so not match.')
-    }
-  }
-
   useEffect(() => {
     if (usernameInput.current) {
       usernameInput.current.focus()
     }
   }, [])
-
+  
+  const handleSignUp = async () => {
+    setErrorMessage('')
+    if (password !== cpassword) {
+      setErrorMessage('Passwords do not match')
+      return
+    }
+    const result = await register(username, password)
+    if (result === true) {
+      navigate('/')
+    } else {
+      setErrorMessage(result)
+    }
+  }
 
   return (
     <main>
       <div className={styles.container}>
+        {errorMessage && <p className={styles.error}>{errorMessage}</p>}
         <form action="" 
         onSubmit={(e) => {
           e.preventDefault()
-          handleLogin()
+          handleSignUp()
         }}
           className={styles.authentication}>
           <input type="text" 
