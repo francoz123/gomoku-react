@@ -5,16 +5,19 @@ type squareProps = {
     row: number
     col: number
     value: string
+    pause:boolean
+    pauseFunction: (pause:boolean) => void
     updateFunction: (x:number, y:number) => void
 }
 
 // Represents a square on the board
 function Square(props: squareProps) {
-  const {id, row, col, value, updateFunction} = props;
+  const {id, row, col, value, pause, pauseFunction, updateFunction} = props;
   
   function handleClick(){
-    if (!(value)) {
+    if (!(value) && !pause) {
         updateFunction(row, col)
+        pauseFunction(true)
     }
   }
 

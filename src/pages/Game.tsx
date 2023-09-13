@@ -19,6 +19,7 @@ function Game() {
   const [gameOver, setGameOver] = useState(false);
   const [winner, setWinner] = useState('');
   const [turn, setTurn] = useState('b');
+  const [pause, setPause] = useState(false);
 
   const [board, setBoard] = useState(
     Array.from({length:boardSize}).map((_) => 
@@ -74,6 +75,7 @@ function Game() {
       return 'Unable to login at this moment, please try again'
     }
   }
+
   if (!user) return <Navigate to='/login' />
   let elements = initializeElements()
 
@@ -189,6 +191,8 @@ function Game() {
               row={index}
               col={i}
               value={board[index][i]}
+              pause={pause}
+              pauseFunction={setPause}
               updateFunction={updateBoard}
             />
           }
