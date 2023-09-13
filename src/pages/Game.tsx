@@ -3,8 +3,8 @@ import styles from './Game.module.css'
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Square } from '../components';
 import { UserContext } from '../context';
-import { GameRecord, GameState, User, GameUpdate } from '../types';
-import { put, setToken } from '../utils/http'
+import { GameRecord, GameState, GameUpdate } from '../types';
+import { put } from '../utils/http'
 
 /**
  * Repressents the game.
@@ -51,11 +51,10 @@ function Game() {
   );
 
   useEffect(() => {
-    
-    
-  }, [])
+    updateServer()
+  })
 
-  async function updateServer() {
+  const updateServer = async () => {
     const API_HOST = process.env.REACT_APP_API_HOST
     try {
       const update = await put<GameState, GameUpdate>(`${API_HOST}/api/game/gameplay`, gameState)
@@ -66,7 +65,7 @@ function Game() {
       newSate.winner = update.winner
       newSate.gameOver = update.gameOver
       SetGameState(newSate)
-      
+
       return true
     } catch (error) {
       if (error instanceof Error) {
