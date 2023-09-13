@@ -1,9 +1,10 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import styles from './Game.module.css'
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Square } from '../components';
 import { UserContext } from '../context';
-import { GameRecord } from '../types';
+import { GameRecord, GameState, User, GameUpdate } from '../types';
+import { put, setToken } from '../utils/http'
 
 /**
  * Repressents the game.
@@ -27,14 +28,53 @@ function Game() {
 
   const [moves, setMoves] = useState(
     Array.from({length:boardSize}).map((_) =>
-        Array.from({length:boardSize}).map((i) => 0)
+      Array.from({length:boardSize}).map((i) => 0)
     )
   );
+
+  const [gameState, SetGameState] = useState<GameState>(
+    {
+      board: board,
+      moves:moves,
+      moveNumber:0,
+      boardSize: boardSize,
+      turn:turn,
+      date: getDate(),
+      winner: null,
+      gameOver:false,
+      lastMove:null
+    }
+  )
 
   const [message, setMessage] = useState(
     (turn === 'b'? 'Black':'White')+' to play'
   );
 
+  useEffect(() => {
+    
+    
+  }, [])
+
+  async function updateServer() {
+    const API_HOST = process.env.REACT_APP_API_HOST
+    try {
+      const update = await put<GameState, GameUpdate>(`${API_HOST}/api/game/gameplay`, gameState)
+      setGameOver(update.gameOver)
+      
+      let newSate = {...gameState}
+      newSate._id = update._id
+      newSate.winner = update.winner
+      newSate.gameOver = update.gameOver
+      SetGameState(newSate)
+      
+      return true
+    } catch (error) {
+      if (error instanceof Error) {
+        return error.message
+      }
+      return 'Unable to login at this moment, please try again'
+    }
+  }
   if (!user) return <Navigate to='/login' />
   let elements = initializeElements()
 
@@ -44,6 +84,10 @@ function Game() {
 
   function validSquare(x: number, y:number): boolean{
     return (x >=0 && x<=boardSize && y>=0 && y<boardSize)
+  }
+
+  function connectAndUpdate(x:number, y:number){
+    
   }
 
   function updateBoard(x:number, y:number) {

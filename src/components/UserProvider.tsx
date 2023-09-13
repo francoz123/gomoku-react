@@ -12,10 +12,6 @@ type UserProviderProps = {
 const API_HOST = process.env.REACT_APP_API_HOST || ''//'http://localhost:8080'
 
 export default function UserProvider({ children }: UserProviderProps) {
-  /* const [user, setUser] = useState<User | undefined>((():User | undefined => {
-    const item = window.localStorage.getItem('user')
-    return item ? JSON.parse(item) : undefined
-  })()) */
   const [user, setUser] = useLocalStorage<User | undefined>('user', undefined)
   if (user) {
     setToken(user.token)
