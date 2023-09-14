@@ -43,7 +43,7 @@ function Game() {
       date: getDate(),
       winner: '',
       gameOver:false,
-      lastMove:null
+      lastMove:[-1,-1]
     }
   )
 
