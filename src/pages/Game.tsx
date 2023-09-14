@@ -55,7 +55,10 @@ function Game() {
     updateServer()
   }) */
 
-  const updateServer = async () => {
+  const updateServer = async (y:number, x:number) => {
+    let newGameState = {...gameState}
+    newGameState.lastMove = [y,x]
+    SetGameState(newGameState)
     const API_HOST = process.env.REACT_APP_API_HOST
     try {
       const update = await put<GameState, GameUpdate>(
@@ -102,7 +105,7 @@ function Game() {
     setMoves(newMoves)
     setMoveNumber(num => num + 1)
 
-    updateServer()
+    updateServer(x, y)
 
     if (!gameOver) {
       changeTurn()
