@@ -1,5 +1,5 @@
 export type GameUpdate = {
   _id:string
-  winner: string | null
+  winner: string
   gameOver: boolean
 }

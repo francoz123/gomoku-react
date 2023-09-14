@@ -41,7 +41,7 @@ function Game() {
       boardSize: boardSize,
       turn:turn,
       date: getDate(),
-      winner: null,
+      winner: '',
       gameOver:false,
       lastMove:null
     }
@@ -51,14 +51,16 @@ function Game() {
     (turn === 'b'? 'Black':'White')+' to play'
   );
 
-  useEffect(() => {
+  /* useEffect(() => {
     updateServer()
-  })
+  }) */
 
   const updateServer = async () => {
     const API_HOST = process.env.REACT_APP_API_HOST
     try {
-      const update = await put<GameState, GameUpdate>(`${API_HOST}/api/game/gameplay`, gameState)
+      const update = await put<GameState, GameUpdate>(
+        `${API_HOST}/api/game/gameplay`, gameState
+      )
       setGameOver(update.gameOver)
       
       let newSate = {...gameState}
@@ -66,13 +68,15 @@ function Game() {
       newSate.winner = update.winner
       newSate.gameOver = update.gameOver
       SetGameState(newSate)
+      setGameOver(update.gameOver)
+      setPause(false)
 
       return true
     } catch (error) {
       if (error instanceof Error) {
         return error.message
       }
-      return 'Unable to login at this moment, please try again'
+      return 'Unable to connect to server'
     }
   }
 
@@ -87,10 +91,6 @@ function Game() {
     return (x >=0 && x<=boardSize && y>=0 && y<boardSize)
   }
 
-  function connectAndUpdate(x:number, y:number){
-    
-  }
-
   function updateBoard(x:number, y:number) {
     if (gameOver) return 0
     let newBoard = [...board]
@@ -102,24 +102,16 @@ function Game() {
     setMoves(newMoves)
     setMoveNumber(num => num + 1)
 
-    if (countPieces(x, y) >= 5) {
-      setGameOver(true)
-      setMessage((turn === 'w'? 'White': 'Black' ) + ' wins')
-      setWinner((turn === 'w'? 'White': 'Black'))
-      return 5
-    }
-
-    if (draw()) {
-      setGameOver(true)
-      setWinner('Draw')
-      setMessage('Draw')
-      return
-    }
+    updateServer()
 
     if (!gameOver) {
       changeTurn()
       setMessage((turn === 'w'? 'Black':'White')+' to play')
+    }else {
+      setWinner(gameState.winner)
+      setMessage('Draw')
     }
+
   }
 
   function countPieces(yCoord:number, xCoord:number) {

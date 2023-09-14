@@ -6,7 +6,7 @@ export  type GameState = {
   boardSize: number
   turn:string
   date: string
-  winner: string | null
+  winner: string
   gameOver:boolean
   lastMove:[number, number] | null
 }
