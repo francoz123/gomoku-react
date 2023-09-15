@@ -7,7 +7,7 @@ type squareProps = {
     value: string
     pause:boolean
     pauseFunction: (pause:boolean) => void
-    updateFunction: (x:number, y:number) => void
+    updateFunction: (x:number, y:number) => Promise<void>
 }
 
 // Represents a square on the board

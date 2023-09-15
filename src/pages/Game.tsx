@@ -51,32 +51,36 @@ function Game() {
     (turn === 'b'? 'Black':'White')+' to play'
   );
 
-  /* useEffect(() => {
-    updateServer()
-  }) */
-
-  const updateServer = async () => {
+  const updateServer = async (gameState:GameState) => {
     const API_HOST = process.env.REACT_APP_API_HOST
-    try {
+    //try {
       const update = await put<GameState, GameUpdate>(
         `${API_HOST}/api/game/gameplay`, gameState
       )
       
-      let newSate = {...gameState}
+      /* let newSate = {...gameState}
       newSate._id = update._id
       newSate.winner = update.winner
       newSate.gameOver = update.gameOver
       SetGameState(gs => newSate)
       setGameOver(go => update.gameOver)
-      setPause(false)
-
-      return true
-    } catch (error) {
+      setPause(p => false) */
+      /* if (gameOver) {
+        setWinner(w => gameState.winner)
+        if (winner !== 'Draw') {
+          setMessage((gameState.turn === 'w'? 'White': 'Black' ) + ' wins')
+          return
+        }
+        setMessage('Draw')
+        return
+      } */
+      return update
+   /*  } catch (error) {
       if (error instanceof Error) {
         return error.message
       }
       return 'Unable to connect to server'
-    }
+    } */
   }
 
   if (!user) return <Navigate to='/login' />
@@ -90,101 +94,56 @@ function Game() {
     return (x >=0 && x<=boardSize && y>=0 && y<boardSize)
   }
 
-  function updateBoard(x:number, y:number) {
-    if (gameOver) {
-      setWinner(w => gameState.winner)
-      if (winner !== 'Draw') {
-        setMessage((turn === 'w'? 'White': 'Black' ) + ' wins')
-        return
-      }
-      setMessage('Draw')
-      return
-    }
+  async function updateBoard(x:number, y:number) {
+    if (gameOver) return
+
     let newBoard = [...board]
     newBoard[x][y] = turn
     setBoard(newBoard)
-
     let newMoves = [...moves]
     newMoves[x][y] = moveNumber
     setMoves(newMoves)
     setMoveNumber(num => num + 1)
 
-    /* let newGameState = {...gameState}
-    newGameState.lastMove = [x,y] */
-    SetGameState(gs => {
-        gs.lastMove = [x,y]
-        return gs
+    SetGameState({...gameState,
+      lastMove: [x,y],
+      board: newBoard,
+      moves: newMoves,
+      moveNumber: moveNumber,
+      turn: turn
     })
 
-    updateServer()
+    console.log('before: ',moveNumber,{...gameState}, gameState.lastMove)
+    const update = await updateServer({...gameState,
+      lastMove: [x,y],
+      board: newBoard,
+      moves: newMoves,
+      moveNumber: moveNumber,
+      turn: turn
+    })
+
+    if (update.gameOver) {
+      console.log(update.winner, typeof update.winner)
+      setGameOver(update.gameOver)
+      setWinner(w => update.winner)
+      if (update.winner === 'Draw') {
+        setMessage('Draw')
+      } else setMessage((update.winner === 'w'? 'White': 'Black' ) + ' wins')
+      return
+    }
+    SetGameState({
+      ...gameState,
+      _id: update._id,
+      winner: update.winner,
+      gameOver: update.gameOver
+    })
 
     if (!gameOver) {
       changeTurn()
       setMessage((turn === 'w'? 'Black':'White')+' to play')
-    }else {
-      setWinner(w => gameState.winner)
-      if (winner !== 'Draw') {
-        setMessage((turn === 'w'? 'White': 'Black' ) + ' wins')
-        return
-      }
-      setMessage('Draw')
     }
-
-  }
-
-  function countPieces(yCoord:number, xCoord:number) {
-    let count = 1;
-    let currentTurn = turn
-    let counts = [[0,0,0], [0,0,0], [0,0,0]]
-    // Counts in all possible directions
-    for (let dy = -1; dy <= 1; dy++) { // (-1, -1), (-1, 1) etc
-      for (let dx = -1; dx <= 1; dx++) {
-        let currernCount = 1
-
-        if (dx === 0 && dy === 0) continue // Skips start location
-        let x = xCoord + dx
-        var y = yCoord + dy
-
-        if (!validSquare(x, y)) continue
-
-        let square = board[y][x]
-
-        if (square === currentTurn){
-          currernCount++
-          let x1 = x + dx
-          let y1 = y + dy
-
-          if (!validSquare(x1, y1)) continue
-
-          square = board[y1][x1]
-          
-          while (square === currentTurn) {
-            currernCount++
-            x1 += dx
-            y1 += dy
-            if (validSquare(x1, y1)) square = board[y1][x1]
-            else break
-          }
-          counts[1+dy][1+dx] = currernCount-1
-          count = currernCount + counts[1+(-dy)][1+(-dx)]
-          if (count >= 5) {
-            setGameOver(true)
-            return count
-          }
-          
-        }
-      }
-    }
-    return count
-  }
-
-  function draw() {
-    for (let i = 0; i < boardSize; i++) {
-      for (let j = 0; j < boardSize; j++) {
-        if(board[i][j] === '') return false
-      }
-    }
-    return true
+    
+    setPause(p => false)
   }
   
   function initializeElements() {
@@ -227,6 +186,20 @@ function Game() {
     setTurn('b')
     setMessage('Black to play')
     setPause(false)
+    SetGameState(gs => {
+      return {
+        ...(gs._id && {_id:gs._id}),
+        board: board,
+        moves:moves,
+        moveNumber:0,
+        boardSize: boardSize,
+        turn:turn,
+        date: getDate(),
+        winner: '',
+        gameOver:false,
+        lastMove:[-1,-1]
+      }
+    })
   }
 
   function leaveGame() {
