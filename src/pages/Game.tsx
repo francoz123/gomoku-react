@@ -55,23 +55,19 @@ function Game() {
     updateServer()
   }) */
 
-  const updateServer = async (y:number, x:number) => {
-    let newGameState = {...gameState}
-    newGameState.lastMove = [y,x]
-    SetGameState(newGameState)
+  const updateServer = async () => {
     const API_HOST = process.env.REACT_APP_API_HOST
     try {
       const update = await put<GameState, GameUpdate>(
         `${API_HOST}/api/game/gameplay`, gameState
       )
-      setGameOver(update.gameOver)
       
       let newSate = {...gameState}
       newSate._id = update._id
       newSate.winner = update.winner
       newSate.gameOver = update.gameOver
-      SetGameState(newSate)
-      setGameOver(update.gameOver)
+      SetGameState(gs => newSate)
+      setGameOver(go => update.gameOver)
       setPause(false)
 
       return true
@@ -95,7 +91,15 @@ function Game() {
   }
 
   function updateBoard(x:number, y:number) {
-    if (gameOver) return 0
+    if (gameOver) {
+      setWinner(w => gameState.winner)
+      if (winner !== 'Draw') {
+        setMessage((turn === 'w'? 'White': 'Black' ) + ' wins')
+        return
+      }
+      setMessage('Draw')
+      return
+    }
     let newBoard = [...board]
     newBoard[x][y] = turn
     setBoard(newBoard)
@@ -105,13 +109,24 @@ function Game() {
     setMoves(newMoves)
     setMoveNumber(num => num + 1)
 
-    updateServer(x, y)
+    /* let newGameState = {...gameState}
+    newGameState.lastMove = [x,y] */
+    SetGameState(gs => {
+        gs.lastMove = [x,y]
+        return gs
+    })
+
+    updateServer()
 
     if (!gameOver) {
       changeTurn()
       setMessage((turn === 'w'? 'Black':'White')+' to play')
     }else {
-      setWinner(gameState.winner)
+      setWinner(w => gameState.winner)
+      if (winner !== 'Draw') {
+        setMessage((turn === 'w'? 'White': 'Black' ) + ' wins')
+        return
+      }
       setMessage('Draw')
     }
 
@@ -211,6 +226,7 @@ function Game() {
     setGameOver(false)
     setTurn('b')
     setMessage('Black to play')
+    setPause(false)
   }
 
   function leaveGame() {
