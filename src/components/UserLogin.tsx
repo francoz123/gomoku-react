@@ -6,7 +6,7 @@ import { UserContext } from '../context';
 // Returs the login section of the header element
 function UserLogin() {
   const navigate = useNavigate()
-  const { user } = useContext(UserContext)
+  const { user, logout } = useContext(UserContext)
   return (
     <div className={styles.login}>
         {!user && 
@@ -24,11 +24,18 @@ function UserLogin() {
           </>
         }
         {user && 
-          <button 
-            onClick={() => navigate('games')} 
-            className={styles.loginButton}>
-              Previous games
-          </button>
+          <>
+            <button 
+              onClick={() => navigate('games')} 
+              className={styles.loginButton}>
+                Previous games
+            </button>
+            <button 
+              onClick={() => logout()} 
+              className={styles.loginButton}>
+                Logout
+            </button>
+          </>
         }
     </div>
   )

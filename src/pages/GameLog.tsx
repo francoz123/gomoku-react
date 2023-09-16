@@ -24,7 +24,8 @@ function GameLog() {
   const [game, setGame] = useState(g)
 
   useEffect(() => {
-    getGameFromServer()
+    if (!user) navigate ('/login')
+    else getGameFromServer()
   }, [])
 
   async function getGameFromServer() {

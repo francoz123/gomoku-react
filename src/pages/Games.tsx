@@ -2,10 +2,12 @@ import styles from './Games.module.css'
 import { GameRecord } from '../types';
 import { useNavigate } from 'react-router-dom';
 import { get } from '../utils/http'
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { UserContext } from '../context';
 
 // Displays finished games and their outcomes
 export default function Games() {
+  const { user } = useContext(UserContext)
   const navigate = useNavigate()
   let gr: GameRecord[] = []
   const [gamesLength, setGameLength] = useState(0)
@@ -13,7 +15,8 @@ export default function Games() {
   //let games: GameRecord[] = savedGAmes?  JSON.parse(savedGAmes) : null
 
   useEffect(() => {
-    getGamesFromServer()
+    if (!user) navigate ('/login')
+    else getGamesFromServer()
   }, [])
 
   async function getGamesFromServer() {
