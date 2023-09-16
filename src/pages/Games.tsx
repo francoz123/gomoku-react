@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 export default function Games() {
   const navigate = useNavigate()
   let gr: GameRecord[] = []
-  const [gameRecords, setGameRecords] = useState(gr)
+  const [gamesLength, setGameLength] = useState(0)
   const [games, setGames] = useState(gr)
   //let games: GameRecord[] = savedGAmes?  JSON.parse(savedGAmes) : null
 
@@ -22,22 +22,24 @@ export default function Games() {
         `${API_HOST}/api/game/games`
       )
       
-      setGameRecords(gameRecords)
+      setGames(gameRecords)
+      setGameLength(gameRecords.length)
+      console.log(gameRecords)
   }
 
   return (
     <main>
-      {games.length===0 && <p className={styles.info}>No games available</p>}
-      {games.length>0 && <div className={styles.container}>
+      {gamesLength===0 && <p className={styles.info}>No games available</p>}
+      {gamesLength && <div className={styles.container}>
         {games.map((game) => 
           (<div className={styles.logs}>
             <div className={styles.log}>
               <div className={styles.gameInfo}>
                 <div className={styles.record}>
-                  Game #{game.id} @{game.date}
+                  Game #{game.gameNumber} @{game.date}
                 </div>
                 <div className={styles.record}>
-                  {game.winner === 'Draw'? 'Game was a draw':'Winner: '+game.winner}
+                  {game.winner === 'Draw'? 'Game was a draw':'Winner: '+(game.winner==='b'?'Black':'White')}
                 </div>
               </div>
               <button onClick={() => navigate(`/game-log/${game.id}`)}>
