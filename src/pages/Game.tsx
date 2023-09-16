@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext } from 'react'
 import styles from './Game.module.css'
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Square } from '../components';
@@ -90,9 +90,9 @@ function Game() {
     setTurn(t => t = t === 'b'? 'w': 'b')
   }
 
-  function validSquare(x: number, y:number): boolean{
+  /* function validSquare(x: number, y:number): boolean{
     return (x >=0 && x<=boardSize && y>=0 && y<boardSize)
-  }
+  } */
 
   async function updateBoard(x:number, y:number) {
     if (gameOver) return
