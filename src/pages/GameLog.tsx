@@ -13,6 +13,7 @@ function GameLog() {
   const {id} = useParams()
   const { user } = useContext(UserContext)
   const navigate = useNavigate()
+
   let g: GameRecord = {
     id: undefined,
     boardSize: 0,
@@ -33,9 +34,7 @@ function GameLog() {
       const gameRecord = await get<GameRecord>(
         `${API_HOST}/api/game/gamelog/${id}`
       )
-      
       setGame(gameRecord)
-      console.log(gameRecord)
   }
 
   if (!user) return <Navigate to='/login' />

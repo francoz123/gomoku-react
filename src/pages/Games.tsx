@@ -27,13 +27,12 @@ export default function Games() {
       
       setGames(gameRecords)
       setGameLength(gameRecords.length)
-      console.log(gameRecords)
   }
 
   return (
     <main>
       {gamesLength===0 && <p className={styles.info}>No games available</p>}
-      {gamesLength && <div className={styles.container}>
+      {gamesLength>0 && <div className={styles.container}>
         {games.map((game) => 
           (<div className={styles.logs}>
             <div className={styles.log}>

@@ -53,34 +53,20 @@ function Game() {
 
   const updateServer = async (gameState:GameState) => {
     const API_HOST = process.env.REACT_APP_API_HOST
-    //try {
-      const update = await put<GameState, GameUpdate>(
-        `${API_HOST}/api/game/gameplay`, gameState
-      )
       
-      /* let newSate = {...gameState}
-      newSate._id = update._id
-      newSate.winner = update.winner
-      newSate.gameOver = update.gameOver
-      SetGameState(gs => newSate)
-      setGameOver(go => update.gameOver)
-      setPause(p => false) */
-      /* if (gameOver) {
-        setWinner(w => gameState.winner)
-        if (winner !== 'Draw') {
-          setMessage((gameState.turn === 'w'? 'White': 'Black' ) + ' wins')
-          return
-        }
-        setMessage('Draw')
-        return
-      } */
-      return update
-   /*  } catch (error) {
-      if (error instanceof Error) {
-        return error.message
+      if (gameState._id){
+        console.log("game is ",gameState._id)
+        const update = await put<GameState, GameUpdate>(
+          `${API_HOST}/api/game/gameplay/update`, gameState
+        )
+        return update
+      }else {
+        const update = await put<GameState, GameUpdate>(
+          `${API_HOST}/api/game/gameplay`, gameState
+        )
+        return update
       }
-      return 'Unable to connect to server'
-    } */
+      
   }
 
   if (!user) return <Navigate to='/login' />
