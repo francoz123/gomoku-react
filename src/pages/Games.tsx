@@ -41,7 +41,10 @@ export default function Games() {
                   Game #{game.gameNumber} @{game.date}
                 </div>
                 <div className={styles.record}>
-                  {game.winner === 'Draw'? 'Game was a draw':'Winner: '+(game.winner==='b'?'Black':'White')}
+                  {game.winner? 
+                    game.winner === 'Draw'? 'Game was a draw':'Winner: '+(game.winner==='b'?'Black':'White')
+                    : 'Not completed'
+                  }
                 </div>
               </div>
               <button onClick={() => navigate(`/game-log/${game.id}`)}>
